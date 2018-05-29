@@ -1,15 +1,12 @@
-import pecan
+from datetime import datetime
 import httplib
-from pecan import expose, request
-from webob.exc import status_map
 import json
+import time
+
+import pecan
 import requests
 from six.moves.urllib import parse
-import time
-from datetime import datetime
-
-
-TESTAPI_URL = 'http://testresults.opnfv.org/test/api/v1'
+from webob.exc import status_map
 
 
 def url_join(*urls):
@@ -18,7 +15,7 @@ def url_join(*urls):
             base += '/'
         return parse.urljoin(base, url)
 
-    urls = (TESTAPI_URL,) + urls
+    urls = (pecan.conf.get('testapi_url'),) + urls
     return reduce(_path_join, urls)
 
 
@@ -40,7 +37,11 @@ def parse_time(date_string):
     return time.mktime(dt.timetuple()) * 1000
 
 
-def parse_results(queries):
+def parse_results(target, range):
+    queries = json.loads(target)
+    queries.update({'from': range.get('from'),
+                    'to': range.get('to')})
+
     res = get_resources(url_query('results', queries)).get('results')
     news = [[1 if result.get('criteria') == 'PASS' else 0,
              parse_time(result.get('start_date'))] for result in res]
@@ -73,30 +74,31 @@ def search_cases():
 
 class RootController(object):
 
-    @expose(generic=True)
+    @pecan.expose(generic=True)
     def index(self):
         return "Welcome To Grafana-TestAPI"
 
-    @expose(generic=True, template="json")
+    @pecan.expose(generic=True, template="json")
     def query(self):
-        targets = request.json.get('targets')
+        targets = pecan.request.json.get('targets')
+        range = pecan.request.json.get('range')
         rets = [
             {
                 "target": target.get('target'),
-                "datapoints": parse_results(json.loads(target.get('target')))
+                "datapoints": parse_results(target.get('target'), range)
             } for target in targets
         ]
         return rets
 
-    @expose(generic=True, template="json")
+    @pecan.expose(generic=True, template="json")
     def search(self):
-        target = request.json.get('target')
+        target = pecan.request.json.get('target')
         if target == 'cases':
             return search_cases()
         else:
             return search_elements(target)
 
-    @expose("error.html")
+    @pecan.expose("error.html")
     def error(self, status):
         try:
             status = int(status)

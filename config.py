@@ -52,3 +52,4 @@ logging = {
 #
 # All configurations are accessible at::
 # pecan.conf
+testapi_url = 'http://testresults.opnfv.org/test/api/v1'
