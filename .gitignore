@@ -1,0 +1,16 @@
+*~
+.*.sw?
+.idea
+*.py[cod]
+
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+.cache
+.tox
+*.retry
