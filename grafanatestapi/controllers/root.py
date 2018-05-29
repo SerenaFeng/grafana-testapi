@@ -33,6 +33,7 @@ def get_resources(url):
     except Exception:
         pecan.abort(httplib.SERVICE_UNAVAILABLE)
 
+
 def parse_time(date_string):
     dt = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
     return time.mktime(dt.timetuple()) * 1000
@@ -59,7 +60,6 @@ def search_elements(resource):
 
 
 def search_cases():
-
     def _by_project(project):
         url = url_join('projects', project, 'cases')
         return search_by_url(url, 'testcases')
