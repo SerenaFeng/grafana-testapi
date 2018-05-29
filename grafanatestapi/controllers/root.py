@@ -15,7 +15,7 @@ def url_join(*urls):
             base += '/'
         return parse.urljoin(base, url)
 
-    urls = (os.environ.get('testapi_url', 'http://localhost:8000/api/v1'),) + urls
+    urls = (os.getenv('TESTAPI_URL', 'http://localhost:8000/api/v1'),) + urls
     return reduce(_path_join, urls)
 
 
