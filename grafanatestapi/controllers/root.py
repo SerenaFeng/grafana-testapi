@@ -68,8 +68,7 @@ def search_cases():
 
     cases = []
     for project in projects:
-        if project.get('name') == 'functest':
-            cases.extend(_by_project(project))
+        cases.extend(_by_project(project))
     return cases
 
 
