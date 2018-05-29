@@ -1,8 +1,9 @@
 from datetime import datetime
 import httplib
 import json
-import time
 import os
+import time
+
 import pecan
 import requests
 from six.moves.urllib import parse

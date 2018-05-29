@@ -14,6 +14,8 @@ setup(
     author_email='',
     install_requires=[
         "pecan",
+        "requests",
+        "six"
     ],
     test_suite='grafanatestapi',
     zip_safe=False,
