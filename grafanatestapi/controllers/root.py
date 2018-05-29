@@ -2,7 +2,7 @@ from datetime import datetime
 import httplib
 import json
 import time
-
+import os
 import pecan
 import requests
 from six.moves.urllib import parse
@@ -15,7 +15,7 @@ def url_join(*urls):
             base += '/'
         return parse.urljoin(base, url)
 
-    urls = (pecan.conf.get('testapi_url'),) + urls
+    urls = (os.environ.get('testapi_url', 'http://localhost:8000/api/v1'),) + urls
     return reduce(_path_join, urls)
 
 
