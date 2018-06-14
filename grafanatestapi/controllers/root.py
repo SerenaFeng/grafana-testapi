@@ -51,7 +51,10 @@ def parse_results(target, range):
 
 
 def search_by_url(url, resource):
-    elements = get_resources(url).get(resource)
+    try:
+        elements = get_resources(url).get(resource)
+    except:
+        elements = []
     return [element.get('name') for element in elements]
 
 
