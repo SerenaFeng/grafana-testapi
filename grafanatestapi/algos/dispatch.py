@@ -1,8 +1,12 @@
+import httplib
 import logging
+import os
+
+import pecan
 import pkg_resources
 
 
-LOG = logging.getLogger(__file__)
+LOG = logging.getLogger(os.path.basename(__file__))
 
 
 class AlgoDispatcher(object):
@@ -20,7 +24,8 @@ class AlgoDispatcher(object):
 
         entry_point = AlgoDispatcher.entry_points_cache.get(algo_type)
         if not entry_point:
-            raise Exception('Not supported Algo {}'.format(algo_type))
+            pecan.abort(status_code=httplib.BAD_REQUEST,
+                        detail='Not supported Algo {}'.format(algo_type))
 
         ep = entry_point.load()
         res = ep().calc(target, **kwargs)

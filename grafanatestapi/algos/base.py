@@ -1,8 +1,8 @@
 from datetime import datetime
 import httplib
+import logging
 import os
 import time
-import logging
 
 import pecan
 import requests
@@ -39,7 +39,8 @@ def get_resources(url):
 
 class Base(object):
     def __init__(self):
-        self.logger = logging.getLogger(__file__)
+        self.logger = logging.getLogger(os.path.basename(__file__))
+
 
     def calc(self, target, **kwargs):
         queries = target

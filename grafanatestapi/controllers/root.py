@@ -1,13 +1,13 @@
 import json
 import logging
+import os
 
 import pecan
 from webob.exc import status_map
 
 from grafanatestapi.algos.dispatch import AlgoDispatcher
 
-
-LOG = logging.getLogger(__file__)
+LOG = logging.getLogger(os.path.basename(__file__))
 
 
 class RootController(object):
