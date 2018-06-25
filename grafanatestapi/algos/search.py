@@ -14,7 +14,7 @@ class Searcher(base.Base):
 
     def search_by_url(self, url, resource):
         try:
-            elements = self.get_resources(url).get(resource)
+            elements = base.get_resources(url).get(resource)
         except:
             elements = []
         return [element.get('name') for element in elements]

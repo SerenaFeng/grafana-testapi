@@ -1,8 +1,13 @@
-import pecan
 import json
+import logging
+
+import pecan
 from webob.exc import status_map
 
 from grafanatestapi.algos.dispatch import AlgoDispatcher
+
+
+LOG = logging.getLogger(__file__)
 
 
 class RootController(object):
@@ -15,6 +20,7 @@ class RootController(object):
     def query(self):
         targets = pecan.request.json.get('targets')
         range = pecan.request.json.get('range')
+        LOG.debug('Query targets [{}]'.format(targets))
         rets = [
             {
                 "target": target.get('target'),
@@ -28,6 +34,7 @@ class RootController(object):
     @pecan.expose(generic=True, template="json")
     def search(self):
         target = pecan.request.json.get('target')
+        LOG.info('Search target [{}]'.format(target))
         return AlgoDispatcher().dispatch({'algo': 'search',
                                           'target': target})
 

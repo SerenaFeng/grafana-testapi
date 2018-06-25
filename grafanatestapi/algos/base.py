@@ -2,6 +2,7 @@ from datetime import datetime
 import httplib
 import os
 import time
+import logging
 
 import pecan
 import requests
@@ -26,9 +27,19 @@ def url_join(*urls):
     return reduce(_path_join, urls)
 
 
+def get_resources(url):
+    try:
+        res = requests.get(url)
+        if res.status_code != httplib.OK:
+            pecan.abort(res.status_code, detail=res.reason)
+        return res.json()
+    except Exception:
+        pecan.abort(httplib.SERVICE_UNAVAILABLE)
+
+
 class Base(object):
     def __init__(self):
-        pass
+        self.logger = logging.getLogger(__file__)
 
     def calc(self, target, **kwargs):
         queries = target
@@ -37,17 +48,11 @@ class Base(object):
             queries.update({'from': range.get('from'),
                             'to': range.get('to')})
 
-        results = self.get_resources(url_query('results', queries)).get('results')
+        self.logger.info('Calc target [{}]'.format(queries))
+
+        results = get_resources(url_query('results', queries)).get('results')
         return self.parse(results=results)
 
     def parse(self, **kwargs):
         pass
 
-    def get_resources(self, url):
-        try:
-            res = requests.get(url)
-            if res.status_code != httplib.OK:
-                pecan.abort(res.status_code, detail=res.reason)
-            return res.json()
-        except Exception:
-            pecan.abort(httplib.SERVICE_UNAVAILABLE)
