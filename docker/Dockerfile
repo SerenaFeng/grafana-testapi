@@ -6,9 +6,6 @@ RUN apk --no-cache add --update \
 RUN pip install --no-cache-dir --src /home \
     -e git+https://github.com/serenafeng/grafana-testapi.git#egg=grafana-testapi
 
-ENV HOME /home
 WORKDIR /home/grafana-testapi
-RUN pip install -r requirements.txt
-
 
 CMD ["pecan", "serve", "config.py"]
