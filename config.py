@@ -1,6 +1,6 @@
 # Server Specific Configurations
 server = {
-    'port': '8070',
+    'port': '8080',
     'host': '0.0.0.0'
 }
 
